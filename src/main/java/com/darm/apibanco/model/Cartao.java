@@ -1,14 +1,12 @@
 package com.darm.apibanco.model;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.UUID;
 
 @Getter
@@ -17,6 +15,8 @@ import java.util.UUID;
 public class Cartao {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(updatable = false, unique = true, nullable = false)
     private UUID idCartao;
 
     @NotBlank
