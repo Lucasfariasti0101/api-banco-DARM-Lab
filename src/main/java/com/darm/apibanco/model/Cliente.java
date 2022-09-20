@@ -41,7 +41,7 @@ public class Cliente {
     @Size(max = 255)
     private String endereco;
 
-    @NotBlank
+    @Enumerated(EnumType.STRING)
     private TipoDeConta tipoDaConta;
 
     @NotBlank

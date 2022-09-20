@@ -6,7 +6,9 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.UUID;
 
 @Getter
@@ -32,14 +34,24 @@ public class Cartao {
     private String cvc;
 
     @NotBlank
+    @Enumerated(value = EnumType.STRING)
     private TipoDeCartao tipoDeCartao;
 
     @NotBlank
     private LocalDate dataDeValidade;
 
-    public void data (int qtdAnos, LocalDate localDate) {
+    @ManyToOne
+    private Cliente cliente;
+
+    public LocalDate data (int qtdAnos) {
         dataDeValidade = LocalDate.now().plusYears(qtdAnos);
-        setDataDeValidade(dataDeValidade);
+
+        String pattern = "MM/yy";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        String date = simpleDateFormat.format(new Date());
+        dataDeValidade = LocalDate.parse(date);
+
+        return dataDeValidade;
     }
 
 }
