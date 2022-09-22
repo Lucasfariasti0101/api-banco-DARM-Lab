@@ -1,19 +1,17 @@
 package com.darm.apibanco.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
-@Getter
-@Setter
+@Data
 @Entity
+@NoArgsConstructor
 public class Cartao {
 
     @Id
@@ -21,37 +19,41 @@ public class Cartao {
     @Column(updatable = false, unique = true, nullable = false)
     private UUID idCartao;
 
+    @NonNull
     @NotBlank
     @Size(max = 19)
     private String numero;
 
+    @NonNull
     @NotBlank
     @Size(max = 20)
     private String bandeira;
 
+    @NonNull
     @NotBlank
     @Size(max = 3)
     private String cvc;
 
-    @NotBlank
+    @NonNull
     @Enumerated(value = EnumType.STRING)
     private TipoDeCartao tipoDeCartao;
 
+    @NonNull
     @NotBlank
-    private LocalDate dataDeValidade;
-
+    @Size(min = 5, max = 16)
+    private String dataDeValidade;
+    @NonNull
     @ManyToOne
+    @JoinColumn(name = "id")
     private Cliente cliente;
 
-    public LocalDate data (int qtdAnos) {
-        dataDeValidade = LocalDate.now().plusYears(qtdAnos);
+    public String data (int qtdAnos) {
+        LocalDate dataValidade = LocalDate.now().plusYears(qtdAnos);
 
-        String pattern = "MM/yy";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        String date = simpleDateFormat.format(new Date());
-        dataDeValidade = LocalDate.parse(date);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/yy");
 
-        return dataDeValidade;
+        return dataValidade.format(formatter);
+
     }
 
 }

@@ -2,6 +2,7 @@ package com.darm.apibanco.controller;
 
 import com.darm.apibanco.DTO.CartaoDTO;
 import com.darm.apibanco.model.Cartao;
+import com.darm.apibanco.model.Cliente;
 import com.darm.apibanco.model.TipoDeCartao;
 import com.darm.apibanco.service.CartaoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,9 @@ public class CartaoController {
     CartaoService cartaoService;
 
     @PostMapping("/criar-cartao")
-    public ResponseEntity<Void> criarCartao(@RequestBody CartaoDTO cartaoDTO) {
+    public ResponseEntity<Cartao> criarCartao(@RequestBody CartaoDTO cartaoDTO) {
         Cartao cartao = new Cartao();
+        System.out.println(cartaoDTO.toString());
 
         switch (cartaoDTO.getTipoDeCartao()) {
             case "Debito" -> cartao.setTipoDeCartao(TipoDeCartao.DEBITO);
@@ -31,11 +33,13 @@ public class CartaoController {
         }
 
         cartao.setCvc(cartaoDTO.getCvc());
-        cartao.setNumero(cartao.getNumero());
+        cartao.setNumero(cartaoDTO.getNumero());
         cartao.setDataDeValidade(cartao.data(cartaoDTO.getAnosDeValidade()));
         cartao.setBandeira(cartaoDTO.getBandeira());
+        Cliente cliente = cartaoService.validacaoDeCliente(cartaoDTO.getNomeCliente());
+        cartao.setCliente(cliente);
+        System.out.println(cartao.toString());
 
-        cartao.setCliente(cartaoService.validacaoDeCliente(cartaoDTO.getNomeCliente()));
 
         cartaoService.save(cartao);
         return ResponseEntity.ok().build();

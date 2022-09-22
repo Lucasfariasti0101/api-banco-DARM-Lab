@@ -1,25 +1,21 @@
 package com.darm.apibanco.controller;
 
-import com.darm.apibanco.DTO.ClienteDTO;
-import com.darm.apibanco.DTO.LoginDTO;
-import com.darm.apibanco.DTO.ReculperarSenhaDTO;
+import com.darm.apibanco.DTO.*;
 import com.darm.apibanco.model.Cliente;
 import com.darm.apibanco.model.TipoDeConta;
 import com.darm.apibanco.repository.ClienteRepository;
 import com.darm.apibanco.service.ClienteService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping(value = "/api/v1")
 public class ClienteController {
-
-
     ClienteRepository clienteRepository;
     ClienteService clienteService;
 
@@ -84,7 +80,7 @@ public class ClienteController {
 
             if (cliente.getNome().equals(nome) && cliente.getEmail().equals(email)) {
                 cliente.setSenha("123");
-                cliente = clienteService.save(cliente);
+                clienteService.save(cliente);
                 return ResponseEntity.ok().build();
             }
         } catch (Exception e) {
@@ -94,5 +90,34 @@ public class ClienteController {
         return ResponseEntity.noContent().build();
     }
 
+    @PostMapping("/editar-perfil/adicionar-foto")
+    public ResponseEntity<Cliente> adicionarFoto(@RequestBody AdicionarFotoDTO objDTO) {
+        clienteService.upFotoCliente(objDTO);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/editar-perfil/mudar-senha")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<Cliente> mudarSenha(@RequestBody MudarSenhaDTO objDTO) {
+        clienteService.mudarSenha(objDTO);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/editar-perfil/deletar")
+    public ResponseEntity<Void> deletarPerfil(@RequestBody DeletarClienteDTO objDTO) {
+
+       if (clienteService.deletarCliente(objDTO)) {
+        return ResponseEntity.ok().build();
+       }
+        return ResponseEntity.badRequest().build();
+    }
+    @DeleteMapping("/cartao/deletar")
+    public ResponseEntity<Void> deletarCartao(@RequestBody DeletarCartaoDTO objDTO) {
+
+        if (clienteService.deletarCartao(objDTO)) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.badRequest().build();
+    }
 
 }

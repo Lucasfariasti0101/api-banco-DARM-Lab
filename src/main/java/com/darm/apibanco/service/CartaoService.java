@@ -9,30 +9,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 public class CartaoService {
     @Autowired
     CartaoRepository cartaoRepository;
+    @Autowired
     ClienteRepository clienteRepository;
 
     @Transactional
-    public Cartao save(Cartao cartao) {
-        boolean usedNum = cartaoRepository.findByNum(cartao.getNumero())
-                .stream()
-                .anyMatch(c -> !c.equals(cartao));
-        if (usedNum) {
-            throw new DomainException("O número do cartão já está sendo usado.");
+    public void save(Cartao cartao) {
+        boolean usedNum = cartaoRepository.findByNum(cartao.getNumero()).isEmpty();
+        if (!usedNum) {
+            throw new DomainException("O cartão já está sendo usado.");
         }
-        return cartaoRepository.save(cartao);
+        cartao.toString();
+        cartaoRepository.save(cartao);
     }
-
+    @Transactional
     public Cliente validacaoDeCliente(String nomeCliente) {
         boolean nomeInvalido = clienteRepository.findByNome(nomeCliente)
                 .stream()
                 .anyMatch(c -> c.equals(nomeCliente));
         if (nomeInvalido) {
-            throw new DomainException("O nome informado é invalido ou não existe!");
+            throw new DomainException("O nome informado é invalido ou cliente não esta cadastrado!");
         }
-       return clienteRepository.findByNome(nomeCliente).get();
+
+        Optional<Cliente> cliente;
+        cliente = clienteRepository.findByNome(nomeCliente);
+        return cliente.get();
     }
 }
