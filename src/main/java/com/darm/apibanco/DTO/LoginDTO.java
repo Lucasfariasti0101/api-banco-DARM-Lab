@@ -5,5 +5,5 @@ import lombok.Getter;
 @Getter
 public class LoginDTO {
     private String cpf;
-    private String nome;
+    private String senha;
 }

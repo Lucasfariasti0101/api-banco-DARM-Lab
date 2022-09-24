@@ -1,7 +1,7 @@
 package com.darm.apibanco.service;
 
 import com.darm.apibanco.DTO.AdicionarFotoDTO;
-import com.darm.apibanco.DTO.DeletarCartaoDTO;
+import com.darm.apibanco.DTO.VerificarCartaoDTO;
 import com.darm.apibanco.DTO.DeletarClienteDTO;
 import com.darm.apibanco.DTO.MudarSenhaDTO;
 import com.darm.apibanco.exeption.DomainException;
@@ -9,18 +9,19 @@ import com.darm.apibanco.model.Cartao;
 import com.darm.apibanco.model.Cliente;
 import com.darm.apibanco.repository.CartaoRepository;
 import com.darm.apibanco.repository.ClienteRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 import java.util.Optional;
 
+@AllArgsConstructor
 @Service
 public class ClienteService {
-
-    @Autowired
     ClienteRepository clienteRepository;
+
+
     CartaoRepository cartaoRepository;
 
     @Transactional
@@ -92,7 +93,7 @@ public class ClienteService {
     }
 
     @Transactional
-    public boolean deletarCartao(DeletarCartaoDTO objDTO) {
+    public boolean deletarCartao(VerificarCartaoDTO objDTO) {
 
         Cartao cartao = cartaoRepository.findByNum(objDTO.getNum()).get();
 

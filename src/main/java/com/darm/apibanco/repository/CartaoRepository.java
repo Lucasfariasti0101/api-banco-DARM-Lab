@@ -12,5 +12,8 @@ public interface CartaoRepository extends JpaRepository<Cartao, UUID> {
             "WHERE numero LIKE (:numero)")
     Optional<Cartao> findByNum(String numero);
 
-
+    @Query(nativeQuery = true, value = "SELECT * FROM cartao " +
+            "WHERE numero LIKE (:num) " +
+            "AND cvc LIKE (:cvc)")
+    Optional<Cartao> getByNumCvc(String num, String cvc);
 }

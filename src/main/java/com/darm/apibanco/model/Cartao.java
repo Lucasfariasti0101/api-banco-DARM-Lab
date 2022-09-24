@@ -39,6 +39,10 @@ public class Cartao {
     private TipoDeCartao tipoDeCartao;
 
     @NonNull
+    @Enumerated(value = EnumType.STRING)
+    private StatusCartao statusCartao = StatusCartao.PENDENTE;
+
+    @NonNull
     @NotBlank
     @Size(min = 5, max = 16)
     private String dataDeValidade;

@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -34,4 +35,8 @@ public interface ClienteRepository extends JpaRepository<Cliente, UUID>{
             "WHERE numero LIKE (:num) " +
             "AND cvc LIKE (:cvc) ")
     boolean deletarCartaoByNumCvc(String num, String cvc);
+
+    @Query(nativeQuery = true, value = "SELECT * FROM cliente " +
+            "ORDER BY nome ASC")
+    List<Cliente> findAllByOrdemAlfabetica();
 }

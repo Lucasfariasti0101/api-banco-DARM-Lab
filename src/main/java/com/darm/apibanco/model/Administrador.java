@@ -1,16 +1,17 @@
 package com.darm.apibanco.model;
 
-import lombok.*;
+import lombok.Data;
+import lombok.NonNull;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.List;
 import java.util.UUID;
+
 @Data
 @Entity
-public class Cliente {
+public class Administrador {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -35,32 +36,17 @@ public class Cliente {
 
     @NonNull
     @NotBlank
-    @Size(max = 20)
-    private String telefone;
-
-    @NonNull
-    @NotBlank
     @Size(max = 255)
     private String endereco;
 
     @NonNull
     @NotBlank
-    @Size(max = 255)
+    @Size(max = 60)
     private String estado;
-
-    @NonNull
-    @Enumerated(EnumType.STRING)
-    private TipoDeConta tipoDaConta;
 
     @NonNull
     @NotBlank
     private String senha;
 
-    private String urlFoto;
-
-    @OneToMany(mappedBy = "cliente")
-    private List<Cartao> cartaos;
-
-    public Cliente() {
-    }
+    public Administrador () {}
 }

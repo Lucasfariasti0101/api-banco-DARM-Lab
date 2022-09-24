@@ -5,17 +5,18 @@ import com.darm.apibanco.model.Cartao;
 import com.darm.apibanco.model.Cliente;
 import com.darm.apibanco.repository.CartaoRepository;
 import com.darm.apibanco.repository.ClienteRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+@AllArgsConstructor
 @Service
 public class CartaoService {
-    @Autowired
+
     CartaoRepository cartaoRepository;
-    @Autowired
     ClienteRepository clienteRepository;
 
     @Transactional

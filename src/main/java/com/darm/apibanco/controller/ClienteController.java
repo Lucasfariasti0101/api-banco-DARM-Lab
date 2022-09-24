@@ -53,12 +53,12 @@ public class ClienteController {
     public ResponseEntity<Void> login(@RequestBody LoginDTO usuario) {
         Cliente cliente;
         String cpf = usuario.getCpf();
-        String nome = usuario.getNome();
+        String senha= usuario.getSenha();
 
         try {
             cliente = clienteRepository.findByCpf(cpf).get();
 
-            if (cliente.getNome().equals(nome)) {
+            if (cliente.getSenha().equals(senha)) {
                 return ResponseEntity.ok().build();
             }
         } catch (Exception e) {
@@ -112,7 +112,7 @@ public class ClienteController {
         return ResponseEntity.badRequest().build();
     }
     @DeleteMapping("/cartao/deletar")
-    public ResponseEntity<Void> deletarCartao(@RequestBody DeletarCartaoDTO objDTO) {
+    public ResponseEntity<Void> deletarCartao(@RequestBody VerificarCartaoDTO objDTO) {
 
         if (clienteService.deletarCartao(objDTO)) {
             return ResponseEntity.ok().build();

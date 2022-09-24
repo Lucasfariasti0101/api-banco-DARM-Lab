@@ -5,18 +5,17 @@ import com.darm.apibanco.model.Cartao;
 import com.darm.apibanco.model.Cliente;
 import com.darm.apibanco.model.TipoDeCartao;
 import com.darm.apibanco.service.CartaoService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping(path = "/api/v1")
 public class CartaoController {
-
-    @Autowired
     CartaoService cartaoService;
 
     @PostMapping("/criar-cartao")
@@ -42,7 +41,7 @@ public class CartaoController {
 
 
         cartaoService.save(cartao);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(cartao);
     }
 
 }
