@@ -1,4 +1,4 @@
-<h1 class="code-line" data-line-start=0 data-line-end=1 ><a id="Readme_API_Desafio_Desenvolvedor_BackEnd_0"></a>Readme: API- Desafio Desenvolvedor Back-End</h1>
+</p><h1 class="code-line" data-line-start=0 data-line-end=1 ><a id="Readme_API_Desafio_Desenvolvedor_BackEnd_0"></a>Readme: API- Desafio Desenvolvedor Back-End</h1>
 <p class="has-line-data" data-line-start="1" data-line-end="2">Essa API foi construida para atender os requisitos no teste disponibilizado.</p>
 <h2 class="code-line" data-line-start=3 data-line-end=4 ><a id="Requisitos_3"></a>Requisitos</h2>
 <ul>
@@ -11,9 +11,27 @@
 <p class="has-line-data" data-line-start="11" data-line-end="12">Você vai precisar:</p>
 <ul>
 <li class="has-line-data" data-line-start="13" data-line-end="14">Java JDK 17</li>
-<li class="has-line-data" data-line-start="14" data-line-end="15">Maven 3.6.3 or higher</li>
+<li class="has-line-data" data-line-start="14" data-line-end="15">Maven 3.6.3 ou superior</li>
 <li class="has-line-data" data-line-start="15" data-line-end="17">Git</li>
+<li class="has-line-data" data-line-start="15" data-line-end="17">PostgreSQL 12 </li>
 </ul>
+
+<p class="has-line-data" data-line-start="17" data-line-end="18">Para se conectar com o banco de dados, use as seguintes configurações no arquivo [application.properties] do projeto.</p>
+
+<p class="has-line-data" data-line-start="17" data-line-end="18">Primeiro crie uma banco de dados com o nome "darm-api", e declare no arquivo, como podemos ver abaixo. Depois digite o usuario do DB e sua senha.</p>
+<code>spring.datasource.url=jdbc:postgresql://localhost:5433/darm-api
+spring.datasource.username=usuario<br>
+spring.datasource.password=senha</code>
+
+<p class="has-line-data" data-line-start="17" data-line-end="18">O restante das configurações podém permanecer do modo que estão.</p>
+
+<code>spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true </code>
+<br><code>spring.jpa.hibernate.ddl-auto=update </code>
+<br><code>spring.jpa.show-sql=true</code>
+<br><code>spring.jpa.properties.hibernate.format_sql=true </code>
+<br><code>spring.jpa.properties.hibernate.show_sql=true </code>
+<br><code>spring.jpa.properties.hibernate.use_sql_comments=true </code>
+
 <p class="has-line-data" data-line-start="17" data-line-end="18">Execute o comando mvn clean install para baixar as dependências do projeto através do maven.</p>
 <pre><code>$ mvn clean install
 </code></pre>
