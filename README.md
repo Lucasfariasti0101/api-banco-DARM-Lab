@@ -5,7 +5,7 @@
 <li class="has-line-data" data-line-start="4" data-line-end="5">Spring Framework</li>
 <li class="has-line-data" data-line-start="5" data-line-end="7">SpringBoot</li>
 </ul>
-<h2 class="code-line" data-line-start=7 data-line-end=8 ><a id="Dependencies_7"></a>Dependencies</h2>
+<h2 class="code-line" data-line-start=7 data-line-end=8 ><a id="Dependencies_7"></a>Dependencias</h2>
 <p class="has-line-data" data-line-start="8" data-line-end="9">Há várias dependências de terceiros usadas no projeto. Navegue no arquivo pom.xml do Maven para obter detalhes das bibliotecas e versões usadas.</p>
 <h2 class="code-line" data-line-start=10 data-line-end=11 ><a id="Building_the_project_10"></a>Building the project</h2>
 <p class="has-line-data" data-line-start="11" data-line-end="12">Você vai precisar:</p>
@@ -38,7 +38,15 @@ spring.datasource.password=senha</code>
 <p class="has-line-data" data-line-start="21" data-line-end="22">Execute o comando mvn spring-boot:run para executar a sua aplicação. Você também pode utilizar o mvnw.</p>
 <pre><code>$ mvn spring-boot:run
 </code></pre>
-<p class="has-line-data" data-line-start="25" data-line-end="26">Se você preferir, também pode-se fazer o build da aplicação por sua IDE.</p>
+<h2 class="code-line" data-line-start=7 data-line-end=8 ><a id="Dependencies_7"></a>Docke Compose</h2>
+<p class="has-line-data" data-line-start="25" data-line-end="26">Você vai precisar:</p>
+<ul>
+<li class="has-line-data" data-line-start="13" data-line-end="14">Docker 20.10.18</li>
+<li class="has-line-data" data-line-start="14" data-line-end="15">Docker Compose 2.10.2</li>
+</ul>
+<p class="has-line-data" data-line-start="25" data-line-end="26">Após a instalação do docker e docker-compose, execute o seguinte comando na raiz do projeto.</p>
+<pre><code>$ docker compose up
+</code></pre>
 <p class="has-line-data" data-line-start="27" data-line-end="28">Você pode testar os endpoints da API com o Cliente do Postman.</p>
 <p class="has-line-data" data-line-start="29" data-line-end="31">POST - Cadastrar Cliente<br>
 <a href="http://localhost:8080/api/v1/cadastrar-usuario">http://localhost:8080/api/v1/cadastrar-usuario</a></p>
