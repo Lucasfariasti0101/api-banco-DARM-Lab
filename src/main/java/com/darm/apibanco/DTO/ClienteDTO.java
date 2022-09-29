@@ -17,6 +17,8 @@ public class ClienteDTO {
 
     private String endereco;
 
+    private String estado;
+
     private String tipoDaConta;
 
     private String senha;

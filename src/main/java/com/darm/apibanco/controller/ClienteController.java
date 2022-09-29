@@ -28,6 +28,7 @@ public class ClienteController {
         cliente.setEmail(clienteDTO.getEmail());
         cliente.setTelefone(clienteDTO.getTelefone());
         cliente.setEndereco(clienteDTO.getEndereco());
+        cliente.setEstado(clienteDTO.getEstado());
 
         if (clienteDTO.getTipoDaConta().equals("Corrente")) {
             cliente.setTipoDaConta(TipoDeConta.CORRENTE);
