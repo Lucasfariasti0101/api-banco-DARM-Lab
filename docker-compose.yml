@@ -1,0 +1,30 @@
+version: "2"
+services:
+  db:
+    image: 'postgres:13.1-alpine'
+    container_name: db
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=darm-api-db
+    restart: unless-stopped
+
+  app:
+    image: 'api-darm:1.0'
+    build: .
+    container_name: api-darm
+    depends_on:
+      - db
+    expose:
+      - 8080
+    ports:
+      - 8080:8080
+    volumes:
+      - .m2:/root/.m2
+    stdin_open: true
+    tty: true
+
+volumes:
+  db:
