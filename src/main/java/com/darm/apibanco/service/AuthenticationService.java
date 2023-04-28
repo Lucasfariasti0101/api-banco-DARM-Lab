@@ -39,7 +39,7 @@ public class AuthenticationService {
 
     @Transactional
     public AuthenticationResponse register(RegisterUserRequest request) {
-        Person person = saveNewPerson(request.personRequest());
+        Person person = createPerson(request.personRequest());
 
         User user = User.builder()
                 .email(request.email())
@@ -48,52 +48,55 @@ public class AuthenticationService {
                 .role(Role.USER)
                 .build();
 
+        person.setUser(user);
         userRepository.save(user);
+        personRepository.save(person);
         String token = jwtService.generateToken(user);
         return createRegisterResponse(token, person);
     }
 
     @Transactional
     public AuthenticationResponse registerAdmin(RegisterUserRequest request) {
-        Person person = saveNewPerson(request.personRequest());
+        Person person = createPerson(request.personRequest());
 
+        // TODO: Mudar a lógica e a ordem para salvar uma pessoa
         User user = User.builder()
                 .email(request.email())
                 .password(passwordEncoder.encode(request.password()))
                 .person(person)
                 .role(Role.ADMIN)
                 .build();
+        person.setUser(user);
 
         userRepository.save(user);
+        personRepository.save(person);
         String token = jwtService.generateToken(user);
         return createRegisterResponse(token, person);
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
+        User user = userRepository.findByEmail(request.email())
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-          authManager.authenticate(new UsernamePasswordAuthenticationToken(
+        authManager.authenticate(new UsernamePasswordAuthenticationToken(
                   request.email(),
                   request.password()));
 
-          User user = userRepository.findByEmail(request.email())
-                  .orElseThrow(() -> new RuntimeException("User not found"));
 
         String token = jwtService.generateToken(user);
         return createRegisterResponse(token, user.getPerson());
     }
 
     @Transactional
-    private Person saveNewPerson(RegisterPersonRequest request) {
+    private Person createPerson(RegisterPersonRequest request) {
 
-        Person person = Person.builder()
+        // TODO: Mudar a lógica e a ordem para salvar uma pessoa
+        return Person.builder()
                 .firstName(request.firstName())
                 .lastName(request.lastName())
                 .cpf(request.cpf())
                 .phoneNumber(request.phoneNumber())
                 .build();
-
-       return personRepository.save(person);
-
     }
 
     private AuthenticationResponse createRegisterResponse(String token, Person person) {
