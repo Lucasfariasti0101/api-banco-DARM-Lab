@@ -1,12 +1,13 @@
 package com.darm.apibanco.DTO;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.br.CPF;
 
 public record RegisterPersonRequest(
-        @NotBlank String firstName,
-        @NotBlank String lastName,
+        @JsonProperty("first-name") @NotBlank String firstName,
+        @JsonProperty("last-name") @NotBlank String lastName,
         @NotBlank @CPF String cpf,
-        @NotBlank String phoneNumber
+        @JsonProperty("phone-number") @NotBlank String phoneNumber
 ) {
 }
