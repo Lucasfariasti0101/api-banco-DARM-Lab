@@ -22,9 +22,10 @@ public class PersonService {
 
     private final CardSimpleResponseMapper cardSimpleResponseMapper;
 
-    public PersonService(PersonRepository personRepository, PersonResponseMapper mapper) {
+    public PersonService(PersonRepository personRepository, PersonResponseMapper mapper, CardSimpleResponseMapper cardSimpleResponseMapper) {
         this.personRepository = personRepository;
         this.mapper = mapper;
+        this.cardSimpleResponseMapper = cardSimpleResponseMapper;
     }
 
     public PersonResponse findById(Long id) {
