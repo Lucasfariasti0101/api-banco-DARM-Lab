@@ -33,6 +33,9 @@ public class CardService {
         Person person = personRepository.findById(personId)
                 .orElseThrow(() -> new RuntimeException("Person not found"));
 
+        if (person.getCards().size() > 6)
+            throw new RuntimeException("Bad request");
+
         Card card = new Card();
 
         card.setCVV(request.cvv());
