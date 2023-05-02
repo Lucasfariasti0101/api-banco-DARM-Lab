@@ -4,6 +4,7 @@ import com.darm.apibanco.DTO.CardSimpleResponse;
 import com.darm.apibanco.DTO.PersonResponse;
 import com.darm.apibanco.DTO.PersonUpdateRequest;
 import com.darm.apibanco.service.PersonService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +37,7 @@ public class PersonController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PersonResponse> update(@PathVariable Long id, @RequestBody PersonUpdateRequest request) {
+    public ResponseEntity<PersonResponse> update(@PathVariable Long id, @RequestBody @Valid PersonUpdateRequest request) {
         return ResponseEntity.ok(personService.update(id, request));
     }
 }
