@@ -39,7 +39,6 @@ public class Card {
     private Person person;
 
     public void setNumber(String number) {
-
-        this.number = number.replaceAll("\\s", "");
+        this.number = number;
     }
 }
