@@ -1,7 +1,9 @@
 package com.darm.apibanco.service;
 
+import com.darm.apibanco.DTO.CardSimpleResponse;
 import com.darm.apibanco.DTO.PersonResponse;
 import com.darm.apibanco.DTO.PersonUpdateRequest;
+import com.darm.apibanco.DTO.mapper.card.CardSimpleResponseMapper;
 import com.darm.apibanco.DTO.mapper.person.PersonResponseMapper;
 import com.darm.apibanco.exeption.PersonNotFoundException;
 import com.darm.apibanco.model.Person;
@@ -17,6 +19,8 @@ public class PersonService {
 
     private final PersonRepository personRepository;
     private final PersonResponseMapper mapper;
+
+    private final CardSimpleResponseMapper cardSimpleResponseMapper;
 
     public PersonService(PersonRepository personRepository, PersonResponseMapper mapper) {
         this.personRepository = personRepository;
@@ -47,6 +51,13 @@ public class PersonService {
         return personRepository.findAll(pageable)
                 .stream()
                 .map(mapper::map)
+                .toList();
+    }
+
+    public List<CardSimpleResponse> findCards(Long id) {
+        return personRepository.findAllCards()
+                .stream()
+                .map(cardSimpleResponseMapper::map)
                 .toList();
     }
 }
