@@ -1,5 +1,6 @@
 package com.darm.apibanco.controller;
 
+import com.darm.apibanco.DTO.CardSimpleResponse;
 import com.darm.apibanco.DTO.PersonResponse;
 import com.darm.apibanco.DTO.PersonUpdateRequest;
 import com.darm.apibanco.service.PersonService;
@@ -27,6 +28,11 @@ public class PersonController {
     @GetMapping("/{id}")
     public ResponseEntity<PersonResponse> findPersonById(@PathVariable Long id) {
        return ResponseEntity.ok(personService.findById(id));
+    }
+
+    @GetMapping("/cards/{id}")
+    public ResponseEntity<List<CardSimpleResponse>> findCardsByPersonId(@PathVariable Long id) {
+        return ResponseEntity.ok(personService.findCards(id));
     }
 
     @PutMapping("/{id}")
