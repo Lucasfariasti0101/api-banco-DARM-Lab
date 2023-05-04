@@ -20,12 +20,9 @@ public class PersonService {
     private final PersonRepository personRepository;
     private final PersonResponseMapper mapper;
 
-    private final CardSimpleResponseMapper cardSimpleResponseMapper;
-
     public PersonService(PersonRepository personRepository, PersonResponseMapper mapper, CardSimpleResponseMapper cardSimpleResponseMapper) {
         this.personRepository = personRepository;
         this.mapper = mapper;
-        this.cardSimpleResponseMapper = cardSimpleResponseMapper;
     }
 
     public PersonResponse findById(Long id) {
@@ -52,13 +49,6 @@ public class PersonService {
         return personRepository.findAll(pageable)
                 .stream()
                 .map(mapper::map)
-                .toList();
-    }
-
-    public List<CardSimpleResponse> findCards(Long id) {
-        return personRepository.findAllCards()
-                .stream()
-                .map(cardSimpleResponseMapper::map)
                 .toList();
     }
 }

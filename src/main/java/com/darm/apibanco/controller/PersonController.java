@@ -31,11 +31,6 @@ public class PersonController {
        return ResponseEntity.ok(personService.findById(id));
     }
 
-    @GetMapping("/cards/{id}")
-    public ResponseEntity<List<CardSimpleResponse>> findCardsByPersonId(@PathVariable Long id) {
-        return ResponseEntity.ok(personService.findCards(id));
-    }
-
     @PutMapping("/{id}")
     public ResponseEntity<PersonResponse> update(@PathVariable Long id, @RequestBody @Valid PersonUpdateRequest request) {
         return ResponseEntity.ok(personService.update(id, request));

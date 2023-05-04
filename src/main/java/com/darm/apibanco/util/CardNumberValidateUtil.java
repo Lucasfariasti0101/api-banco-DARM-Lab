@@ -29,7 +29,7 @@ public class CardNumberValidateUtil {
     }
 
     public static String formatNumber(String number) {
-        boolean digitMatches = number.matches("\\d");
+        boolean digitMatches = number.replaceAll("\\s", "").matches("\\d");
         if (!digitMatches) {
             throw new RuntimeException("");
         }

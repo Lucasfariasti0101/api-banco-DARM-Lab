@@ -3,9 +3,9 @@ server:
 
 spring:
   datasource:
-    url: 'jdbc:postgresql://db:5432/darm-api-db'
+    url: 'jdbc:postgresql://localhost:5432/darm-api-db'
     username: 'postgres'
-    password: 'postgres'
+    password: 'pass'
     driver-class-name: org.postgresql.Driver
 
   jpa:
