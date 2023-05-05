@@ -10,6 +10,7 @@ import com.darm.apibanco.model.enums.CardType;
 import com.darm.apibanco.repository.CardRepository;
 import com.darm.apibanco.repository.PersonRepository;
 import com.darm.apibanco.util.CardNumberValidateUtil;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -21,11 +22,14 @@ public class CardService {
     private final CardRepository cardRepository;
     private final PersonRepository personRepository;
 
+    private final SolicitationService solicitationService;
+
     private final CardSimpleResponseMapper cardSimpleResponseMapper;
 
-    public CardService(CardRepository cardRepository, PersonRepository personRepository, CardSimpleResponseMapper cardSimpleResponseMapper) {
+    public CardService(CardRepository cardRepository, PersonRepository personRepository, SolicitationService solicitationService, CardSimpleResponseMapper cardSimpleResponseMapper) {
         this.cardRepository = cardRepository;
         this.personRepository = personRepository;
+        this.solicitationService = solicitationService;
         this.cardSimpleResponseMapper = cardSimpleResponseMapper;
     }
 
@@ -34,6 +38,7 @@ public class CardService {
                 .orElseThrow(() -> new RuntimeException("Card not found"));
     }
 
+    @Transactional
     public Card save(Long personId, CardRequest request) {
 
         Person person = personRepository.findById(personId)
@@ -54,12 +59,16 @@ public class CardService {
         if (!flag.equals(request.flagFinance().toUpperCase())) {
             throw new RuntimeException("");
         }
+
         card.setNumber(CardNumberValidateUtil.formatNumber(request.number()));
         card.setFlagFinance(flag);
         card.setExpirationDate(LocalDate.now().plusYears(request.yearsToValidity()));
+        card.setPerson(person);
 
-        return cardRepository.save(card);
+        Card cardSaved = cardRepository.save(card);
 
+        solicitationService.createSolicitation(cardSaved);
+        return cardSaved;
     }
 
     public List<CardSimpleResponse> findCards(Long id) {
@@ -67,6 +76,10 @@ public class CardService {
                 .stream()
                 .map(cardSimpleResponseMapper::map)
                 .toList();
+    }
+
+    public void approveSolicitation(Long solicitationId) {
+        solicitationService.approveCardSolicitation(solicitationId);
     }
 
 }
