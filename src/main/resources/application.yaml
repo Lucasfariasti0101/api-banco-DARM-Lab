@@ -1,0 +1,24 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: 'jdbc:postgresql://localhost:5432/darm-api-db'
+    username: 'postgres'
+    password: 'pass'
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    open-in-view: true
+    properties:
+      hibernate:
+        format_sql: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: 'create-drop'
+    show-sql: true
+
+jwt:
+  secret: 782F413F4428472B4B6250655368566D5971337436763979244226452948404D635166546A576E5A7234753778217A25432A462D4A614E645267556B58703273
+  expiration: 86400000
