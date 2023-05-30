@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.time.Instant;
 
 @RestControllerAdvice
-public class exceptionHandlerGlobal {
+public class ExceptionHandlerGlobal {
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ExceptionDetails> resourceNotFoundExceptionHandler(ResourceNotFoundException ex, HttpServletRequest request) {
