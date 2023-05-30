@@ -1,7 +1,7 @@
 package com.darm.apibanco.confg;
 
-import com.darm.apibanco.exeption.PersonNotFoundException;
-import com.darm.apibanco.exeption.ResourceNotFoundException;
+import com.darm.apibanco.exception.PersonNotFoundException;
+import com.darm.apibanco.exception.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

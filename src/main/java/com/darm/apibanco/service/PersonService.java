@@ -1,11 +1,10 @@
 package com.darm.apibanco.service;
 
-import com.darm.apibanco.DTO.CardSimpleResponse;
 import com.darm.apibanco.DTO.PersonResponse;
 import com.darm.apibanco.DTO.PersonUpdateRequest;
 import com.darm.apibanco.DTO.mapper.card.CardSimpleResponseMapper;
 import com.darm.apibanco.DTO.mapper.person.PersonResponseMapper;
-import com.darm.apibanco.exeption.PersonNotFoundException;
+import com.darm.apibanco.exception.PersonNotFoundException;
 import com.darm.apibanco.model.Person;
 import com.darm.apibanco.repository.PersonRepository;
 import jakarta.transaction.Transactional;

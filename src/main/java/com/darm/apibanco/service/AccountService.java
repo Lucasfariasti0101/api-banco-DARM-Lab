@@ -1,9 +1,9 @@
 package com.darm.apibanco.service;
 
 import com.darm.apibanco.DTO.AccountRequest;
-import com.darm.apibanco.exeption.BadRequestException;
-import com.darm.apibanco.exeption.PersonNotFoundException;
-import com.darm.apibanco.exeption.ResourceNotFoundException;
+import com.darm.apibanco.exception.BadRequestException;
+import com.darm.apibanco.exception.PersonNotFoundException;
+import com.darm.apibanco.exception.ResourceNotFoundException;
 import com.darm.apibanco.model.Account;
 import com.darm.apibanco.model.Person;
 import com.darm.apibanco.model.enums.AccountType;

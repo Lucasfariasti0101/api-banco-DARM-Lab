@@ -1,4 +1,4 @@
-package com.darm.apibanco.exeption;
+package com.darm.apibanco.exception;
 
 public class BadRequestException extends RuntimeException{
     public BadRequestException(String message) {

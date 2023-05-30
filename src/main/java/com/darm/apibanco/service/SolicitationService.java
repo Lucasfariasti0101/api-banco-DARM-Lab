@@ -2,8 +2,8 @@ package com.darm.apibanco.service;
 
 import com.darm.apibanco.DTO.SolicitationResponse;
 import com.darm.apibanco.DTO.mapper.solicitation.SolicitationResponseMapper;
-import com.darm.apibanco.exeption.BadRequestException;
-import com.darm.apibanco.exeption.ResourceNotFoundException;
+import com.darm.apibanco.exception.BadRequestException;
+import com.darm.apibanco.exception.ResourceNotFoundException;
 import com.darm.apibanco.model.Card;
 import com.darm.apibanco.model.CardSolicitation;
 import com.darm.apibanco.model.enums.CardStatus;

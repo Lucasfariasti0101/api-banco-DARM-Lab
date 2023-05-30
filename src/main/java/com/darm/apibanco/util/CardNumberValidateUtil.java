@@ -1,6 +1,6 @@
 package com.darm.apibanco.util;
 
-import com.darm.apibanco.exeption.BadRequestException;
+import com.darm.apibanco.exception.BadRequestException;
 
 import java.util.HashMap;
 import java.util.Map;
