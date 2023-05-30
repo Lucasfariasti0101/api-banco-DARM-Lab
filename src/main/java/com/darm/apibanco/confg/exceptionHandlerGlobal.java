@@ -1,5 +1,6 @@
 package com.darm.apibanco.confg;
 
+import com.darm.apibanco.exception.BadRequestException;
 import com.darm.apibanco.exception.PersonNotFoundException;
 import com.darm.apibanco.exception.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,5 +32,15 @@ public class exceptionHandlerGlobal {
                 request.getRequestURI());
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionDetails);
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ExceptionDetails> badRequestExceptionHandler(BadRequestException ex, HttpServletRequest request) {
+        ExceptionDetails exceptionDetails = new ExceptionDetails(ex.getMessage(),
+                HttpStatus.BAD_REQUEST.value(),
+                Instant.now(),
+                request.getRequestURI());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionDetails);
     }
 }
