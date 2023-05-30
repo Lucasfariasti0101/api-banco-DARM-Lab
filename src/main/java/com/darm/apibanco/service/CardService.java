@@ -60,7 +60,7 @@ public class CardService {
                 .validateAndReturnFlag(request.number());
 
         if (!flag.equals(request.flagFinance().toUpperCase())) {
-            throw new RuntimeException("");
+            throw new BadRequestException("The flag finance name not mather with flag finance given");
         }
 
         card.setNumber(CardNumberValidateUtil.formatNumber(request.number()));
