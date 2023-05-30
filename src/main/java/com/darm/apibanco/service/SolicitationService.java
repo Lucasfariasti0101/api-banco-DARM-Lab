@@ -2,6 +2,8 @@ package com.darm.apibanco.service;
 
 import com.darm.apibanco.DTO.SolicitationResponse;
 import com.darm.apibanco.DTO.mapper.solicitation.SolicitationResponseMapper;
+import com.darm.apibanco.exeption.BadRequestException;
+import com.darm.apibanco.exeption.ResourceNotFoundException;
 import com.darm.apibanco.model.Card;
 import com.darm.apibanco.model.CardSolicitation;
 import com.darm.apibanco.model.enums.CardStatus;
@@ -31,7 +33,7 @@ public class SolicitationService {
     public void createSolicitation(Card card) throws RuntimeException {
 
         if (!card.getStatus().equals(CardStatus.PENDING))
-            throw new RuntimeException("Not Pending");
+            throw new BadRequestException("Not Pending");
 
         CardSolicitation solicitation = new CardSolicitation();
 
@@ -44,10 +46,10 @@ public class SolicitationService {
     @Transactional
     public void approveCardSolicitation(Long solicitationId) {
         CardSolicitation solicitation = solicitationRepository.findById(solicitationId)
-                .orElseThrow(() -> new RuntimeException("Solicitation not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Solicitation not found"));
 
         if (!solicitation.getStatus().equals(SolicitationStatus.PENDING)) {
-            throw new RuntimeException("The solicitation is not pending");
+            throw new BadRequestException("The solicitation is not pending");
         }
 
         solicitation.setStatus(SolicitationStatus.APPROVED);

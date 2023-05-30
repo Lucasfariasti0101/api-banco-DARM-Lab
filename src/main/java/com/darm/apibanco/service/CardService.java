@@ -3,6 +3,9 @@ package com.darm.apibanco.service;
 import com.darm.apibanco.DTO.CardRequest;
 import com.darm.apibanco.DTO.CardSimpleResponse;
 import com.darm.apibanco.DTO.mapper.card.CardSimpleResponseMapper;
+import com.darm.apibanco.exeption.BadRequestException;
+import com.darm.apibanco.exeption.PersonNotFoundException;
+import com.darm.apibanco.exeption.ResourceNotFoundException;
 import com.darm.apibanco.model.Card;
 import com.darm.apibanco.model.Person;
 import com.darm.apibanco.model.enums.CardStatus;
@@ -35,17 +38,17 @@ public class CardService {
 
     public Card findCardById(Long id) {
         return cardRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Card not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Card not found"));
     }
 
     @Transactional
     public Card save(Long personId, CardRequest request) {
 
         Person person = personRepository.findById(personId)
-                .orElseThrow(() -> new RuntimeException("Person not found"));
+                .orElseThrow(PersonNotFoundException::new);
 
         if (person.getCards().size() > 6)
-            throw new RuntimeException("Bad request");
+            throw new BadRequestException("The amount of 6 registered cards has been reached");
 
         Card card = new Card();
 

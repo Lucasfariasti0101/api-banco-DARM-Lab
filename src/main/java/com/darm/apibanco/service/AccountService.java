@@ -1,6 +1,9 @@
 package com.darm.apibanco.service;
 
 import com.darm.apibanco.DTO.AccountRequest;
+import com.darm.apibanco.exeption.BadRequestException;
+import com.darm.apibanco.exeption.PersonNotFoundException;
+import com.darm.apibanco.exeption.ResourceNotFoundException;
 import com.darm.apibanco.model.Account;
 import com.darm.apibanco.model.Person;
 import com.darm.apibanco.model.enums.AccountType;
@@ -25,9 +28,9 @@ public class AccountService {
 
     public Account findAccountByPerson(Long personId) {
         Person person = personRepository.findById(personId)
-                .orElseThrow(() -> new RuntimeException(""));
+                .orElseThrow(PersonNotFoundException::new);
         if (person.getAccount() == null) {
-            throw new RuntimeException("Person does not have a bank account");
+            throw new ResourceNotFoundException("Person does not have a bank account");
         }
         return person.getAccount();
     }
@@ -36,7 +39,7 @@ public class AccountService {
     public Account save(Long personId, AccountRequest request) {
 
         Person person = personRepository.findById(personId)
-                .orElseThrow(() -> new RuntimeException("Person not found"));
+                .orElseThrow(PersonNotFoundException::new);
 
         Account account = new Account();
         account.setType(convertStringInAccountType(request.accountType()));
@@ -54,7 +57,7 @@ public class AccountService {
         return Arrays.stream(AccountType.values())
                 .findAny()
                 .filter(accountType -> accountType.equals(AccountType.valueOf(text)))
-                .orElseThrow(() -> new IllegalArgumentException("Non-existent type"));
+                .orElseThrow(() -> new BadRequestException("Non-existent type"));
 
     }
 

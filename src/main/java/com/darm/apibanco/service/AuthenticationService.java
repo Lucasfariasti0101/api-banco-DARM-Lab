@@ -59,7 +59,6 @@ public class AuthenticationService {
     public AuthenticationResponse registerAdmin(RegisterUserRequest request) {
         Person person = createPerson(request.personRequest());
 
-        // TODO: Mudar a lógica e a ordem para salvar uma pessoa
         User user = User.builder()
                 .email(request.email())
                 .password(passwordEncoder.encode(request.password()))
@@ -90,7 +89,6 @@ public class AuthenticationService {
     @Transactional
     private Person createPerson(RegisterPersonRequest request) {
 
-        // TODO: Mudar a lógica e a ordem para salvar uma pessoa
         return Person.builder()
                 .firstName(request.firstName())
                 .lastName(request.lastName())
