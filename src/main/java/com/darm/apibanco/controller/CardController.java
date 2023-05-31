@@ -60,5 +60,9 @@ public class CardController {
     }
 
 
+    @GetMapping("/solicitations/person/{id}")
+    public ResponseEntity<List<SolicitationResponse>> listAllSolicitationsByPersonId(@PathVariable Long id) {
+       return ResponseEntity.ok(cardService.listSolicitationsByPerson(id));
+    }
 
 }

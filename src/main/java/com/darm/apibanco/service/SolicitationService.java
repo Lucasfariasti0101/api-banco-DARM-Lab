@@ -4,12 +4,15 @@ import com.darm.apibanco.DTO.DenyCardSolicitationRequest;
 import com.darm.apibanco.DTO.SolicitationResponse;
 import com.darm.apibanco.DTO.mapper.solicitation.SolicitationResponseMapper;
 import com.darm.apibanco.exception.BadRequestException;
+import com.darm.apibanco.exception.PersonNotFoundException;
 import com.darm.apibanco.exception.ResourceNotFoundException;
 import com.darm.apibanco.model.Card;
 import com.darm.apibanco.model.CardSolicitation;
+import com.darm.apibanco.model.Person;
 import com.darm.apibanco.model.enums.CardStatus;
 import com.darm.apibanco.model.enums.SolicitationStatus;
 import com.darm.apibanco.repository.CardRepository;
+import com.darm.apibanco.repository.PersonRepository;
 import com.darm.apibanco.repository.SolicitationRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -22,11 +25,14 @@ public class SolicitationService {
     private final SolicitationRepository solicitationRepository;
     private final CardRepository cardRepository;
 
+    private final PersonRepository personRepository;
+
     private final SolicitationResponseMapper mapper;
 
-    public SolicitationService(SolicitationRepository solicitationRepository, CardRepository cardRepository, SolicitationResponseMapper mapper) {
+    public SolicitationService(SolicitationRepository solicitationRepository, CardRepository cardRepository, PersonRepository personRepository, SolicitationResponseMapper mapper) {
         this.solicitationRepository = solicitationRepository;
         this.cardRepository = cardRepository;
+        this.personRepository = personRepository;
         this.mapper = mapper;
     }
 
@@ -86,5 +92,13 @@ public class SolicitationService {
 
         cardRepository.save(card);
         solicitationRepository.save(solicitation);
+    }
+
+    public List<SolicitationResponse> findAllSolicitationsByPerson(Long id) {
+        Person person = personRepository.findById(id)
+                .orElseThrow(PersonNotFoundException::new);
+
+        return solicitationRepository.findAllByPersonId(person.getId()).stream().map(mapper::map).toList();
+
     }
 }
