@@ -1,5 +1,6 @@
 package com.darm.apibanco.service;
 
+import com.darm.apibanco.DTO.DenyCardSolicitationRequest;
 import com.darm.apibanco.DTO.SolicitationResponse;
 import com.darm.apibanco.DTO.mapper.solicitation.SolicitationResponseMapper;
 import com.darm.apibanco.exception.BadRequestException;
@@ -30,7 +31,7 @@ public class SolicitationService {
     }
 
     @Transactional
-    public void createSolicitation(Card card) throws RuntimeException {
+    public void createSolicitation(Card card) {
 
         if (!card.getStatus().equals(CardStatus.PENDING))
             throw new BadRequestException("Not Pending");
@@ -56,8 +57,8 @@ public class SolicitationService {
 
         Card card = solicitation.getCard();
         card.setStatus(CardStatus.APPROVED);
-
         cardRepository.save(card);
+        solicitationRepository.save(solicitation);
     }
 
     public List<SolicitationResponse> findAllSolicitations() {
@@ -67,4 +68,23 @@ public class SolicitationService {
                 .toList();
     }
 
+    @Transactional
+    public void denyCardSolicitation(Long id, DenyCardSolicitationRequest request) {
+
+        CardSolicitation solicitation = solicitationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Solicitation not found"));
+
+        if (!solicitation.getStatus().equals(SolicitationStatus.PENDING)) {
+            throw new BadRequestException("The solicitation is not pending");
+        }
+
+        solicitation.setStatus(SolicitationStatus.DENIED);
+        solicitation.setMessage(request.message());
+
+        Card card = solicitation.getCard();
+        card.setStatus(CardStatus.DENIED);
+
+        cardRepository.save(card);
+        solicitationRepository.save(solicitation);
+    }
 }

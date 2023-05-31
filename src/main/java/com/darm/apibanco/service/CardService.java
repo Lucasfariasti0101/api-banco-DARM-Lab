@@ -2,6 +2,7 @@ package com.darm.apibanco.service;
 
 import com.darm.apibanco.DTO.CardRequest;
 import com.darm.apibanco.DTO.CardSimpleResponse;
+import com.darm.apibanco.DTO.DenyCardSolicitationRequest;
 import com.darm.apibanco.DTO.mapper.card.CardSimpleResponseMapper;
 import com.darm.apibanco.exception.BadRequestException;
 import com.darm.apibanco.exception.PersonNotFoundException;
@@ -85,4 +86,7 @@ public class CardService {
         solicitationService.approveCardSolicitation(solicitationId);
     }
 
+    public void denySolicitation(Long id, DenyCardSolicitationRequest request) {
+        solicitationService.denyCardSolicitation(id, request);
+    }
 }

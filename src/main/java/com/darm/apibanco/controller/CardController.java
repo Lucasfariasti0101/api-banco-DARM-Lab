@@ -2,6 +2,7 @@ package com.darm.apibanco.controller;
 
 import com.darm.apibanco.DTO.CardRequest;
 import com.darm.apibanco.DTO.CardSimpleResponse;
+import com.darm.apibanco.DTO.DenyCardSolicitationRequest;
 import com.darm.apibanco.DTO.SolicitationResponse;
 import com.darm.apibanco.model.Card;
 import com.darm.apibanco.service.CardService;
@@ -51,5 +52,13 @@ public class CardController {
         cardService.approveSolicitation(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/solicitations/deny/{id}")
+    public ResponseEntity<Void> denySolicitationCard(@PathVariable Long id, @RequestBody @Valid DenyCardSolicitationRequest requestDTO) {
+        cardService.denySolicitation(id, requestDTO);
+        return ResponseEntity.noContent().build();
+    }
+
+
 
 }
