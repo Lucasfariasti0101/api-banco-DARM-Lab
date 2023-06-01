@@ -1,12 +1,14 @@
 package com.darm.apibanco.service;
 
 import com.darm.apibanco.DTO.*;
+import com.darm.apibanco.exception.ConflictException;
 import com.darm.apibanco.model.Person;
 import com.darm.apibanco.model.User;
 import com.darm.apibanco.model.enums.Role;
 import com.darm.apibanco.repository.PersonRepository;
 import com.darm.apibanco.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -39,6 +41,11 @@ public class AuthenticationService {
 
     @Transactional
     public AuthenticationResponse register(RegisterUserRequest request) {
+
+        if (userRepository.existsByEmail(request.email())) {
+            throw new ConflictException("This email is already being used.");
+        }
+
         Person person = createPerson(request.personRequest());
 
         User user = User.builder()
@@ -57,6 +64,11 @@ public class AuthenticationService {
 
     @Transactional
     public AuthenticationResponse registerAdmin(RegisterUserRequest request) {
+
+        if (userRepository.existsByEmail(request.email())) {
+            throw new ConflictException("This email is already being used.");
+        }
+
         Person person = createPerson(request.personRequest());
 
         User user = User.builder()
@@ -75,7 +87,7 @@ public class AuthenticationService {
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         User user = userRepository.findByEmail(request.email())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new AuthenticationCredentialsNotFoundException("User not found"));
 
         authManager.authenticate(new UsernamePasswordAuthenticationToken(
                   request.email(),
@@ -86,7 +98,6 @@ public class AuthenticationService {
         return createRegisterResponse(token, user.getPerson());
     }
 
-    @Transactional
     private Person createPerson(RegisterPersonRequest request) {
 
         return Person.builder()
