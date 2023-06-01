@@ -3,6 +3,7 @@ package com.darm.apibanco.controller;
 import com.darm.apibanco.DTO.AuthenticationRequest;
 import com.darm.apibanco.DTO.AuthenticationResponse;
 import com.darm.apibanco.DTO.RegisterUserRequest;
+import com.darm.apibanco.model.enums.Role;
 import com.darm.apibanco.service.AuthenticationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,13 +23,13 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterUserRequest request) {
-        return ResponseEntity.ok(authService.register(request));
+        return ResponseEntity.ok(authService.register(request, Role.USER));
     }
 
     @PostMapping("/register-admin")
     public ResponseEntity<AuthenticationResponse> registerAdmin(@RequestBody RegisterUserRequest request) {
 
-        return ResponseEntity.ok(authService.register(request));
+        return ResponseEntity.ok(authService.register(request, Role.ADMIN));
 
     }
 

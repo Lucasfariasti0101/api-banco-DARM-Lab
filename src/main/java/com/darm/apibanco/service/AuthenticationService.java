@@ -40,7 +40,7 @@ public class AuthenticationService {
     }
 
     @Transactional
-    public AuthenticationResponse register(RegisterUserRequest request) {
+    public AuthenticationResponse register(RegisterUserRequest request, Role role) {
 
         if (userRepository.existsByEmail(request.email())) {
             throw new ConflictException("This email is already being used.");
@@ -52,33 +52,10 @@ public class AuthenticationService {
                 .email(request.email())
                 .password(passwordEncoder.encode(request.password()))
                 .person(person)
-                .role(Role.USER)
+                .role(role)
                 .build();
 
         person.setUser(user);
-        userRepository.save(user);
-        personRepository.save(person);
-        String token = jwtService.generateToken(user);
-        return createRegisterResponse(token, person);
-    }
-
-    @Transactional
-    public AuthenticationResponse registerAdmin(RegisterUserRequest request) {
-
-        if (userRepository.existsByEmail(request.email())) {
-            throw new ConflictException("This email is already being used.");
-        }
-
-        Person person = createPerson(request.personRequest());
-
-        User user = User.builder()
-                .email(request.email())
-                .password(passwordEncoder.encode(request.password()))
-                .person(person)
-                .role(Role.ADMIN)
-                .build();
-        person.setUser(user);
-
         userRepository.save(user);
         personRepository.save(person);
         String token = jwtService.generateToken(user);
