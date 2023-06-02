@@ -72,4 +72,9 @@ public class PersonService {
         return personSaved;
     }
 
+    public PersonResponse updateAccount(Long id, AccountRequest request) {
+        accountService.updateAccountType(id, request);
+        return this.findById(id);
+    }
+
 }

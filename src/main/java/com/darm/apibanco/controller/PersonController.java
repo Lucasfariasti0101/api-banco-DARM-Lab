@@ -36,4 +36,9 @@ public class PersonController {
     public ResponseEntity<PersonResponse> update(@PathVariable Long id, @RequestBody @Valid PersonUpdateRequest request) {
         return ResponseEntity.ok(personService.update(id, request));
     }
+
+    @PutMapping("account/{personId}")
+    public ResponseEntity<PersonResponse> updateAccount(@PathVariable Long personId, @RequestBody @Valid AccountRequest request) {
+        return ResponseEntity.ok(personService.updateAccount(personId, request));
+    }
 }

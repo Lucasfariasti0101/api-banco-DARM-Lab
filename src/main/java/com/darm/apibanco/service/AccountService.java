@@ -34,7 +34,6 @@ public class AccountService {
         }
         return person.getAccount();
     }
-
     @Transactional
     public Account save(Long personId, AccountRequest request) {
 
@@ -51,6 +50,14 @@ public class AccountService {
         personRepository.save(person);
 
         return accountSaved;
+    }
+
+    @Transactional
+    public void updateAccountType(Long personId, AccountRequest request) {
+        Account account = findAccountByPerson(personId);
+        account.setType(convertStringInAccountType(request.accountType()));
+
+        accountRepository.save(account);
     }
 
     private AccountType convertStringInAccountType(String text) {
