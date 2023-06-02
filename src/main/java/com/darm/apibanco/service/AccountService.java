@@ -56,7 +56,7 @@ public class AccountService {
     private AccountType convertStringInAccountType(String text) {
         return Arrays.stream(AccountType.values())
                 .findAny()
-                .filter(accountType -> accountType.equals(AccountType.valueOf(text)))
+                .filter(accountType -> accountType.equals(AccountType.valueOf(text.toUpperCase())))
                 .orElseThrow(() -> new BadRequestException("Non-existent type"));
 
     }
