@@ -24,19 +24,19 @@ public class AuthenticationService {
 
     private final AuthenticationManager authManager;
 
-    private final PersonRepository personRepository;
+    private final PersonService personService;
 
     public AuthenticationService(
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
             JwtService jwtService,
-            AuthenticationManager authManager, PersonRepository personRepository) {
+            AuthenticationManager authManager, PersonService personService) {
 
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.authManager = authManager;
-        this.personRepository = personRepository;
+        this.personService = personService;
     }
 
     @Transactional
@@ -57,8 +57,9 @@ public class AuthenticationService {
 
         person.setUser(user);
         userRepository.save(user);
-        personRepository.save(person);
+        personService.save(person);
         String token = jwtService.generateToken(user);
+
         return createRegisterResponse(token, person);
     }
 

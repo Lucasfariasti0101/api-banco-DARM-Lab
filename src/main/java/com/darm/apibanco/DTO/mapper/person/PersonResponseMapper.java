@@ -13,6 +13,9 @@ public class PersonResponseMapper implements Mapper<Person, PersonResponse> {
                 source.getFirstName(),
                 source.getLastName(),
                 source.getCpf(),
-                source.getPhoneNumber(), source.getAddress());
+                source.getPhoneNumber(),
+                source.getAddress(),
+                source.getAccount().getNumber(),
+                source.getAccount().getType().name());
     }
 }

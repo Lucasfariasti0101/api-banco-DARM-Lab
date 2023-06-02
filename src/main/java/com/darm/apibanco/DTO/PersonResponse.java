@@ -10,6 +10,8 @@ public record PersonResponse(
         String lastName,
         String cpf,
         String phoneNumber,
-        List<Address> address
+        List<Address> address,
+        String number,
+        String accountType
 ) {
 }
