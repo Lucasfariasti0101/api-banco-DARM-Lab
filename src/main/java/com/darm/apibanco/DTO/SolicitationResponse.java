@@ -7,9 +7,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public record SolicitationResponse(
         @JsonProperty("solicitation-id") Long id,
 
-        Card card,
+        CardSimpleResponse card,
 
+        @JsonProperty("solicitation-message")
         String message,
 
+        @JsonProperty("solicitation-status")
         SolicitationStatus status) {
 }
