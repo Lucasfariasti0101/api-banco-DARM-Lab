@@ -101,4 +101,11 @@ public class SolicitationService {
         return solicitationRepository.findAllByPersonId(person.getId()).stream().map(mapper::map).toList();
 
     }
+
+    public List<SolicitationResponse> listAllSolicitationByState(String state) {
+        return solicitationRepository.findAllByState(state)
+                .stream()
+                .map(mapper::map)
+                .toList();
+    }
 }

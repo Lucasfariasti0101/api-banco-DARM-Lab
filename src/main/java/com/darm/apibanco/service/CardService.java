@@ -77,7 +77,7 @@ public class CardService {
     }
 
     public List<CardSimpleResponse> findCards(Long id) {
-        return cardRepository.findAll()
+        return cardRepository.findAllByPersonId(id)
                 .stream()
                 .map(cardSimpleResponseMapper::map)
                 .toList();
@@ -95,5 +95,15 @@ public class CardService {
 
         return solicitationService.findAllSolicitationsByPerson(id);
 
+    }
+
+    public List<SolicitationResponse> listAllSolicitationsByState(String state) {
+        boolean matches = state.matches("[a-zA-Z]{2}");
+        if (!matches) {
+            throw new BadRequestException("Provided state name not accepted. " +
+                    "The default state search two alphabetic characters.");
+        }
+        String stateUpper = state.toUpperCase();
+        return solicitationService.listAllSolicitationByState(stateUpper);
     }
 }

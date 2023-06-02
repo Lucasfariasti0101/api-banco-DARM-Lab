@@ -44,7 +44,7 @@ public class CardController {
 
     @GetMapping("/solicitations")
     public ResponseEntity<List<SolicitationResponse>> findAllSolicitations() {
-       return ResponseEntity.ok(solicitationService.findAllSolicitations());
+        return ResponseEntity.ok(solicitationService.findAllSolicitations());
     }
 
     @PostMapping("/solicitations/approve/{id}")
@@ -62,7 +62,12 @@ public class CardController {
 
     @GetMapping("/solicitations/person/{id}")
     public ResponseEntity<List<SolicitationResponse>> listAllSolicitationsByPersonId(@PathVariable Long id) {
-       return ResponseEntity.ok(cardService.listSolicitationsByPerson(id));
+        return ResponseEntity.ok(cardService.listSolicitationsByPerson(id));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<SolicitationResponse>> listAllSolicitationsByState(String state) {
+        return ResponseEntity.ok(cardService.listAllSolicitationsByState(state));
     }
 
 }
