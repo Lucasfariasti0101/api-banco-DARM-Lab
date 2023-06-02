@@ -93,7 +93,9 @@ public class AuthenticationService {
                 person.getLastName(),
                 person.getCpf(),
                 person.getPhoneNumber(),
-                person.getAddress());
+                person.getAddress(),
+                person.getAccount().getNumber(),
+                person.getAccount().getType().name());
 
         return new AuthenticationResponse(token, personResponse);
 
