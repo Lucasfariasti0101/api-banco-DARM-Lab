@@ -1,9 +1,6 @@
 package com.darm.apibanco.controller;
 
-import com.darm.apibanco.DTO.AccountRequest;
-import com.darm.apibanco.DTO.CardSimpleResponse;
-import com.darm.apibanco.DTO.PersonResponse;
-import com.darm.apibanco.DTO.PersonUpdateRequest;
+import com.darm.apibanco.DTO.*;
 import com.darm.apibanco.service.PersonService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
@@ -41,4 +38,11 @@ public class PersonController {
     public ResponseEntity<PersonResponse> updateAccount(@PathVariable Long personId, @RequestBody @Valid AccountRequest request) {
         return ResponseEntity.ok(personService.updateAccount(personId, request));
     }
+
+    @PutMapping("/add/address/{id}")
+    public ResponseEntity<Void> addAddress(@PathVariable Long id, @RequestBody @Valid List<AddressRequest> addressRequestDTO) {
+        personService.addAddress(id, addressRequestDTO);
+
+    }
+
 }
