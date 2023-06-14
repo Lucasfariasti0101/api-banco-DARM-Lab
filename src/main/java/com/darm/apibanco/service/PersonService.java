@@ -1,13 +1,12 @@
 package com.darm.apibanco.service;
 
-import com.darm.apibanco.DTO.AccountRequest;
-import com.darm.apibanco.DTO.AddressRequest;
-import com.darm.apibanco.DTO.PersonResponse;
-import com.darm.apibanco.DTO.PersonUpdateRequest;
+import com.darm.apibanco.DTO.*;
 import com.darm.apibanco.DTO.mapper.address.AddressRequestMapper;
+import com.darm.apibanco.DTO.mapper.address.AddressResponseMapper;
 import com.darm.apibanco.DTO.mapper.person.PersonResponseMapper;
 import com.darm.apibanco.exception.ConflictException;
 import com.darm.apibanco.exception.PersonNotFoundException;
+import com.darm.apibanco.exception.ResourceNotFoundException;
 import com.darm.apibanco.model.Address;
 import com.darm.apibanco.model.Person;
 import com.darm.apibanco.repository.AddressRepository;
@@ -26,16 +25,19 @@ public class PersonService {
 
     private final AddressRequestMapper addressMapper;
 
+    private final AddressResponseMapper addressResponseMapper;
+
     private final AccountService accountService;
 
     private final AddressRepository addressRepository;
 
     public PersonService(PersonRepository personRepository,
                          PersonResponseMapper mapper,
-                         AddressRequestMapper addressMapper, AccountService accountService, AddressRepository addressRepository) {
+                         AddressRequestMapper addressMapper, AddressResponseMapper addressResponseMapper, AccountService accountService, AddressRepository addressRepository) {
         this.personRepository = personRepository;
         this.mapper = mapper;
         this.addressMapper = addressMapper;
+        this.addressResponseMapper = addressResponseMapper;
         this.accountService = accountService;
         this.addressRepository = addressRepository;
     }
@@ -87,7 +89,7 @@ public class PersonService {
         return this.findById(id);
     }
 
-    public void addAddress(Long id, List<AddressRequest> addressRequestDTO) {
+    public List<AddressResponse> addAddress(Long id, List<AddressRequest> addressRequestDTO) {
         Person person = personRepository.findById(id)
                 .orElseThrow(PersonNotFoundException::new);
 
@@ -99,5 +101,45 @@ public class PersonService {
 
         person.setAddress(addresses);
         personRepository.save(person);
+
+        return addresses.stream()
+                .map(addressResponseMapper::map)
+                .toList();
+    }
+
+    public Address findAddressById(Long id) {
+        return addressRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(""));
+    }
+
+    public Address updateAddress(Long personId, Long addressId, AddressRequest updateRequest) {
+        Address address = getPersonAddress(addressId, personId);
+        return addressRepository.save(updateAddressEntity(address, updateRequest));
+    }
+
+    public void deleteAddress(Long id, Long personId) {
+        Address address = getPersonAddress(id, personId);
+        addressRepository.deleteById(address.getId());
+    }
+
+    private Address getPersonAddress(Long addressId, Long personId) {
+        Person person = personRepository.findById(personId)
+                .orElseThrow(PersonNotFoundException::new);
+
+        return person.getAddress()
+                .stream()
+                .filter(a -> a.getId().equals(addressId))
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Address not found or does not belong to person."));
+    }
+
+    private Address updateAddressEntity(Address oldAddress, AddressRequest updateRequestDTO) {
+        oldAddress.setState(updateRequestDTO.state());
+        oldAddress.setStreet(updateRequestDTO.street());
+        oldAddress.setComplement(updateRequestDTO.complement());
+        oldAddress.setMunicipality(updateRequestDTO.municipality());
+        oldAddress.setNumber(updateRequestDTO.number());
+        oldAddress.setNeighborhood(updateRequestDTO.neighborhood());
+        return oldAddress;
     }
 }

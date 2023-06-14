@@ -40,9 +40,8 @@ public class PersonController {
     }
 
     @PutMapping("/add/address/{id}")
-    public ResponseEntity<Void> addAddress(@PathVariable Long id, @RequestBody @Valid List<AddressRequest> addressRequestDTO) {
-        personService.addAddress(id, addressRequestDTO);
-
+    public ResponseEntity<List<AddressResponse>> addAddress(@PathVariable Long id, @RequestBody @Valid List<AddressRequest> addressRequestDTO) {
+        return ResponseEntity.ok(personService.addAddress(id, addressRequestDTO));
     }
 
 }
