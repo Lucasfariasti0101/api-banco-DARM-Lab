@@ -7,9 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface SolicitationRepository extends JpaRepository<CardSolicitation, Long> {
-    List<CardSolicitation> findAllByPersonId(Long id);
+    List<CardSolicitation> findAllByCardPersonId(Long id);
 
     //TODO: Implementar uma query para buscar uma lista de solicitações pelo Estado de person.
     @Query()
-    List<CardSolicitation> findAllByState(String state);
+    List<CardSolicitation> findAllByCardPersonAddressState(String state);
 }

@@ -98,12 +98,12 @@ public class SolicitationService {
         Person person = personRepository.findById(id)
                 .orElseThrow(PersonNotFoundException::new);
 
-        return solicitationRepository.findAllByPersonId(person.getId()).stream().map(mapper::map).toList();
+        return solicitationRepository.findAllByCardPersonId(person.getId()).stream().map(mapper::map).toList();
 
     }
 
     public List<SolicitationResponse> listAllSolicitationByState(String state) {
-        return solicitationRepository.findAllByState(state)
+        return solicitationRepository.findAllByCardPersonAddressState(state)
                 .stream()
                 .map(mapper::map)
                 .toList();
