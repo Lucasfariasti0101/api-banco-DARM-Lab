@@ -2,6 +2,7 @@ package com.darm.apibanco.model;
 
 import com.darm.apibanco.model.enums.CardStatus;
 import com.darm.apibanco.model.enums.CardType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,6 +37,7 @@ public class Card {
 
     @ManyToOne
     @JoinColumn(name = "person_id")
+    @JsonIgnore
     private Person person;
 
     public void setNumber(String number) {
