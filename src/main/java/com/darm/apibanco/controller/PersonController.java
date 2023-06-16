@@ -39,7 +39,7 @@ public class PersonController {
         return ResponseEntity.ok(personService.updateAccount(personId, request));
     }
 
-    @PutMapping("/add/address/{id}")
+    @PostMapping("/add/address/{id}")
     public ResponseEntity<List<AddressResponse>> addAddress(@PathVariable Long id, @RequestBody @Valid List<AddressRequest> addressRequestDTO) {
         return ResponseEntity.ok(personService.addAddress(id, addressRequestDTO));
     }
