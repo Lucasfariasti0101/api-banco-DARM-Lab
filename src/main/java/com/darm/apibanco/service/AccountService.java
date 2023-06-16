@@ -73,7 +73,7 @@ public class AccountService {
         SecureRandom random = new SecureRandom();
         StringBuilder sb = new StringBuilder(length);
         for (int i = 0; i < length; i++) {
-            if (i == 7) {
+            if (i == 6) {
                 sb.append("-");
             } else {
                 int index = random.nextInt(CHARSET.length());
