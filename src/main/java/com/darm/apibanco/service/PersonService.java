@@ -99,9 +99,6 @@ public class PersonService {
                 .map(addressRepository::save)
                 .toList();
 
-        person.setAddress(addresses);
-        personRepository.save(person);
-
         return addresses.stream()
                 .map(addressResponseMapper::map)
                 .toList();
