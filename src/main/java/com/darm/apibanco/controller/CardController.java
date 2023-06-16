@@ -65,8 +65,8 @@ public class CardController {
         return ResponseEntity.ok(cardService.listSolicitationsByPerson(id));
     }
 
-    @GetMapping
-    public ResponseEntity<List<SolicitationResponse>> listAllSolicitationsByState(String state) {
+    @GetMapping("/solicitations/by")
+    public ResponseEntity<List<SolicitationResponse>> listAllSolicitationsByState(@RequestParam(name = "state") String state) {
         return ResponseEntity.ok(cardService.listAllSolicitationsByState(state));
     }
 

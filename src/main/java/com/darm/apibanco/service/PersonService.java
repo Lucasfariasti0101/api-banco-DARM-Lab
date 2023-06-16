@@ -4,6 +4,7 @@ import com.darm.apibanco.DTO.*;
 import com.darm.apibanco.DTO.mapper.address.AddressRequestMapper;
 import com.darm.apibanco.DTO.mapper.address.AddressResponseMapper;
 import com.darm.apibanco.DTO.mapper.person.PersonResponseMapper;
+import com.darm.apibanco.exception.BadRequestException;
 import com.darm.apibanco.exception.ConflictException;
 import com.darm.apibanco.exception.PersonNotFoundException;
 import com.darm.apibanco.exception.ResourceNotFoundException;
@@ -94,7 +95,9 @@ public class PersonService {
                 .orElseThrow(PersonNotFoundException::new);
 
         List<Address> addresses = addressRequestDTO.stream()
+                .peek(a -> this.validateState(a.state()))
                 .map(addressMapper::map)
+                .peek(address -> address.setState(address.getState().toUpperCase()))
                 .peek(address -> address.setPerson(person))
                 .map(addressRepository::save)
                 .toList();
@@ -138,5 +141,11 @@ public class PersonService {
         oldAddress.setNumber(updateRequestDTO.number());
         oldAddress.setNeighborhood(updateRequestDTO.neighborhood());
         return oldAddress;
+    }
+
+    private void validateState(String state) {
+        if (!state.matches("[a-zA-Z]{2}")) {
+            throw new BadRequestException("The State field must consist of your 2-character abbreviation");
+        }
     }
 }
