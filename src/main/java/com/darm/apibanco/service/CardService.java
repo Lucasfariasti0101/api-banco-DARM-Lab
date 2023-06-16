@@ -52,6 +52,10 @@ public class CardService {
         if (person.getCards().size() > 6)
             throw new BadRequestException("The amount of 6 registered cards has been reached");
 
+        if (person.getAddress().isEmpty()) {
+            throw new BadRequestException("It is not possible to register the card because the user has not yet registered an address");
+        }
+
         Card card = new Card();
 
         card.setCVV(request.cvv());
