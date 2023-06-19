@@ -1,5 +1,7 @@
 package com.darm.apibanco.model.enums;
 
+import com.darm.apibanco.exception.BadRequestException;
+
 import java.util.Arrays;
 
 public enum CardType {
@@ -9,6 +11,6 @@ public enum CardType {
         return Arrays.stream(CardType.values()).filter(ct -> ct.name()
                 .equals(value.toUpperCase()))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException(""));
+                .orElseThrow(() -> new BadRequestException("Illegal value for CardType"));
     }
 }

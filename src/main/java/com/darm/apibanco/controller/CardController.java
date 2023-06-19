@@ -2,6 +2,7 @@ package com.darm.apibanco.controller;
 
 import com.darm.apibanco.DTO.CardRequest;
 import com.darm.apibanco.DTO.CardSimpleResponse;
+import com.darm.apibanco.DTO.DenyCardSolicitationRequest;
 import com.darm.apibanco.DTO.SolicitationResponse;
 import com.darm.apibanco.model.Card;
 import com.darm.apibanco.service.CardService;
@@ -43,13 +44,30 @@ public class CardController {
 
     @GetMapping("/solicitations")
     public ResponseEntity<List<SolicitationResponse>> findAllSolicitations() {
-       return ResponseEntity.ok(solicitationService.findAllSolicitations());
+        return ResponseEntity.ok(solicitationService.findAllSolicitations());
     }
 
     @PostMapping("/solicitations/approve/{id}")
     public ResponseEntity<Void> approveSolicitationCard(@PathVariable Long id) {
         cardService.approveSolicitation(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/solicitations/deny/{id}")
+    public ResponseEntity<Void> denySolicitationCard(@PathVariable Long id, @RequestBody @Valid DenyCardSolicitationRequest requestDTO) {
+        cardService.denySolicitation(id, requestDTO);
+        return ResponseEntity.noContent().build();
+    }
+
+
+    @GetMapping("/solicitations/person/{id}")
+    public ResponseEntity<List<SolicitationResponse>> listAllSolicitationsByPersonId(@PathVariable Long id) {
+        return ResponseEntity.ok(cardService.listSolicitationsByPerson(id));
+    }
+
+    @GetMapping("/solicitations/by")
+    public ResponseEntity<List<SolicitationResponse>> listAllSolicitationsByState(@RequestParam(name = "state") String state) {
+        return ResponseEntity.ok(cardService.listAllSolicitationsByState(state));
     }
 
 }

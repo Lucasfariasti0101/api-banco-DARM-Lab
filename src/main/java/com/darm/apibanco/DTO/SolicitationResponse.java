@@ -9,7 +9,9 @@ public record SolicitationResponse(
 
         Card card,
 
+        @JsonProperty("solicitation-message")
         String message,
 
+        @JsonProperty("solicitation-status")
         SolicitationStatus status) {
 }

@@ -1,6 +1,9 @@
 package com.darm.apibanco.service;
 
 import com.darm.apibanco.DTO.AccountRequest;
+import com.darm.apibanco.exception.BadRequestException;
+import com.darm.apibanco.exception.PersonNotFoundException;
+import com.darm.apibanco.exception.ResourceNotFoundException;
 import com.darm.apibanco.model.Account;
 import com.darm.apibanco.model.Person;
 import com.darm.apibanco.model.enums.AccountType;
@@ -25,18 +28,17 @@ public class AccountService {
 
     public Account findAccountByPerson(Long personId) {
         Person person = personRepository.findById(personId)
-                .orElseThrow(() -> new RuntimeException(""));
+                .orElseThrow(PersonNotFoundException::new);
         if (person.getAccount() == null) {
-            throw new RuntimeException("Person does not have a bank account");
+            throw new ResourceNotFoundException("Person does not have a bank account");
         }
         return person.getAccount();
     }
-
     @Transactional
     public Account save(Long personId, AccountRequest request) {
 
         Person person = personRepository.findById(personId)
-                .orElseThrow(() -> new RuntimeException("Person not found"));
+                .orElseThrow(PersonNotFoundException::new);
 
         Account account = new Account();
         account.setType(convertStringInAccountType(request.accountType()));
@@ -50,11 +52,19 @@ public class AccountService {
         return accountSaved;
     }
 
+    @Transactional
+    public void updateAccountType(Long personId, AccountRequest request) {
+        Account account = findAccountByPerson(personId);
+        account.setType(convertStringInAccountType(request.accountType()));
+
+        accountRepository.save(account);
+    }
+
     private AccountType convertStringInAccountType(String text) {
         return Arrays.stream(AccountType.values())
+                .filter(accountType -> accountType.equals(AccountType.valueOf(text.toUpperCase())))
                 .findAny()
-                .filter(accountType -> accountType.equals(AccountType.valueOf(text)))
-                .orElseThrow(() -> new IllegalArgumentException("Non-existent type"));
+                .orElseThrow(() -> new BadRequestException("Non-existent type"));
 
     }
 
@@ -63,7 +73,7 @@ public class AccountService {
         SecureRandom random = new SecureRandom();
         StringBuilder sb = new StringBuilder(length);
         for (int i = 0; i < length; i++) {
-            if (i == 7) {
+            if (i == 6) {
                 sb.append("-");
             } else {
                 int index = random.nextInt(CHARSET.length());

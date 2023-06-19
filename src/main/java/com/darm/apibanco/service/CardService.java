@@ -2,7 +2,12 @@ package com.darm.apibanco.service;
 
 import com.darm.apibanco.DTO.CardRequest;
 import com.darm.apibanco.DTO.CardSimpleResponse;
+import com.darm.apibanco.DTO.DenyCardSolicitationRequest;
+import com.darm.apibanco.DTO.SolicitationResponse;
 import com.darm.apibanco.DTO.mapper.card.CardSimpleResponseMapper;
+import com.darm.apibanco.exception.BadRequestException;
+import com.darm.apibanco.exception.PersonNotFoundException;
+import com.darm.apibanco.exception.ResourceNotFoundException;
 import com.darm.apibanco.model.Card;
 import com.darm.apibanco.model.Person;
 import com.darm.apibanco.model.enums.CardStatus;
@@ -35,17 +40,21 @@ public class CardService {
 
     public Card findCardById(Long id) {
         return cardRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Card not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Card not found"));
     }
 
     @Transactional
     public Card save(Long personId, CardRequest request) {
 
         Person person = personRepository.findById(personId)
-                .orElseThrow(() -> new RuntimeException("Person not found"));
+                .orElseThrow(PersonNotFoundException::new);
 
         if (person.getCards().size() > 6)
-            throw new RuntimeException("Bad request");
+            throw new BadRequestException("The amount of 6 registered cards has been reached");
+
+        if (person.getAddress().isEmpty()) {
+            throw new BadRequestException("It is not possible to register the card because the user has not yet registered an address");
+        }
 
         Card card = new Card();
 
@@ -57,7 +66,7 @@ public class CardService {
                 .validateAndReturnFlag(request.number());
 
         if (!flag.equals(request.flagFinance().toUpperCase())) {
-            throw new RuntimeException("");
+            throw new BadRequestException("The flag finance name not mather with flag finance given");
         }
 
         card.setNumber(CardNumberValidateUtil.formatNumber(request.number()));
@@ -72,7 +81,7 @@ public class CardService {
     }
 
     public List<CardSimpleResponse> findCards(Long id) {
-        return cardRepository.findAll()
+        return cardRepository.findAllByPersonId(id)
                 .stream()
                 .map(cardSimpleResponseMapper::map)
                 .toList();
@@ -82,4 +91,23 @@ public class CardService {
         solicitationService.approveCardSolicitation(solicitationId);
     }
 
+    public void denySolicitation(Long id, DenyCardSolicitationRequest request) {
+        solicitationService.denyCardSolicitation(id, request);
+    }
+
+    public List<SolicitationResponse> listSolicitationsByPerson(Long id) {
+
+        return solicitationService.findAllSolicitationsByPerson(id);
+
+    }
+
+    public List<SolicitationResponse> listAllSolicitationsByState(String state) {
+        boolean matches = state.matches("[a-zA-Z]{2}");
+        if (!matches) {
+            throw new BadRequestException("Provided state name not accepted. " +
+                    "The default state search two alphabetic characters.");
+        }
+        String stateUpper = state.toUpperCase();
+        return solicitationService.listAllSolicitationByState(stateUpper);
+    }
 }

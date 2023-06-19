@@ -1,5 +1,7 @@
 package com.darm.apibanco.util;
 
+import com.darm.apibanco.exception.BadRequestException;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -27,14 +29,15 @@ public class CardNumberValidateUtil {
                 .filter(m -> Pattern.matches(m.getValue(), formattedNumber))
                 .findFirst()
                 .map(Map.Entry::getKey)
-                .orElseThrow(RuntimeException::new).toUpperCase();
+                .orElseThrow(() -> new BadRequestException("The number entered does not match any credit provider."))
+                .toUpperCase();
     }
 
     public static String formatNumber(String number) {
         String cardNum = number.replaceAll("\\s", "");
         boolean digitMatches = cardNum.matches("^[0-9]+$");
         if (!digitMatches) {
-            throw new RuntimeException("");
+            throw new BadRequestException("The number entered does not match any valid format");
         }
         return cardNum;
     }
