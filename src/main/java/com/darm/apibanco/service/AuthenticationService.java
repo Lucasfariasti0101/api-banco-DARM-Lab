@@ -5,7 +5,6 @@ import com.darm.apibanco.exception.ConflictException;
 import com.darm.apibanco.model.Person;
 import com.darm.apibanco.model.User;
 import com.darm.apibanco.model.enums.Role;
-import com.darm.apibanco.repository.PersonRepository;
 import com.darm.apibanco.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;

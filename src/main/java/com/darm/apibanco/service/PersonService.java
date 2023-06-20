@@ -10,13 +10,16 @@ import com.darm.apibanco.exception.PersonNotFoundException;
 import com.darm.apibanco.exception.ResourceNotFoundException;
 import com.darm.apibanco.model.Address;
 import com.darm.apibanco.model.Person;
+import com.darm.apibanco.model.User;
 import com.darm.apibanco.repository.AddressRepository;
 import com.darm.apibanco.repository.PersonRepository;
+import com.darm.apibanco.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PersonService {
@@ -32,15 +35,21 @@ public class PersonService {
 
     private final AddressRepository addressRepository;
 
+    private final UserRepository userRepository;
+    
+    private final ChangePasswordService changePasswordService;
+
     public PersonService(PersonRepository personRepository,
                          PersonResponseMapper mapper,
-                         AddressRequestMapper addressMapper, AddressResponseMapper addressResponseMapper, AccountService accountService, AddressRepository addressRepository) {
+                         AddressRequestMapper addressMapper, AddressResponseMapper addressResponseMapper, AccountService accountService, AddressRepository addressRepository, UserRepository userRepository, ChangePasswordService changePasswordService) {
         this.personRepository = personRepository;
         this.mapper = mapper;
         this.addressMapper = addressMapper;
         this.addressResponseMapper = addressResponseMapper;
         this.accountService = accountService;
         this.addressRepository = addressRepository;
+        this.userRepository = userRepository;
+        this.changePasswordService = changePasswordService;
     }
 
     public PersonResponse findById(Long id) {
@@ -120,6 +129,22 @@ public class PersonService {
     public void deleteAddress(Long id, Long personId) {
         Address address = getPersonAddress(id, personId);
         addressRepository.deleteById(address.getId());
+    }
+
+    public void forgotPassword(ForgotPasswordRequest request) {
+
+        Boolean requestCreated = userRepository.findByEmail(request.email())
+                .map(changePasswordService::createRequestToChangePassword)
+                .orElse(false);
+
+    }
+
+    public Boolean validateCode(CodeChangePasswordRequest request) {
+        return changePasswordService.validateCode(request);
+    }
+
+    public void changePassword() {
+
     }
 
     private Address getPersonAddress(Long addressId, Long personId) {

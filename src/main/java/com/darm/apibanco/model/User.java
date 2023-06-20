@@ -2,10 +2,7 @@ package com.darm.apibanco.model;
 
 import com.darm.apibanco.model.enums.Role;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +13,7 @@ import java.util.List;
 @Entity
 @Table(name = "tb_user")
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
