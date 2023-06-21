@@ -50,7 +50,7 @@ public class ChangePasswordService {
 
         EmailModel emailModel = createEmailModel(changePassword, code);
 
-        return emailService.sendEmailToRecoveryPassword(emailModel);
+        emailService.sendEmailToRecoveryPassword(emailModel);
     }
 
     public Boolean validateCode(CodeChangePasswordRequest request) {
