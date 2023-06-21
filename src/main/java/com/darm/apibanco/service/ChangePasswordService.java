@@ -33,10 +33,13 @@ public class ChangePasswordService {
     }
 
     @Transactional
-    public boolean createRequestToChangePassword(User user) {
+    public void createRequestToChangePassword(User user) {
+
+        if (changePasswordRepository.findByEmail(user.getEmail()).isPresent()) {
+            this.deleteChangePasswordRequest(user.getEmail());
+        }
 
         String code = generateCode();
-
         UserChangePassword userChangePassword = UserChangePassword.builder()
                 .code(encoder.encode(code))
                 .email(user.getEmail())
@@ -48,16 +51,16 @@ public class ChangePasswordService {
         EmailModel emailModel = createEmailModel(changePassword, code);
 
         return emailService.sendEmailToRecoveryPassword(emailModel);
-
     }
 
     public Boolean validateCode(CodeChangePasswordRequest request) {
-       return changePasswordRequestIsValid(request.code(), request.email());
+        return changePasswordRequestIsValid(request.code(), request.email());
     }
 
     @Transactional
     public User changePassword(ChangePasswordRequest request, User user) {
         user.setPassword(encoder.encode(request.password()));
+        this.deleteChangePasswordRequest(user.getEmail());
         return userRepository.save(user);
     }
 
@@ -73,11 +76,11 @@ public class ChangePasswordService {
 
 
     private Boolean validExpiration(LocalDateTime expiration) {
-        return LocalDateTime.now().isAfter(expiration);
+        return !LocalDateTime.now().isAfter(expiration);
     }
 
     private EmailModel createEmailModel(UserChangePassword userChangePassword, String code) {
-        return new EmailModel(code, "Reset Password", userChangePassword.getEmail());
+        return new EmailModel(code, "Reset Password Code", userChangePassword.getEmail());
     }
 
     private String generateCode() {
@@ -91,6 +94,12 @@ public class ChangePasswordService {
 
         }
         return sb.toString();
+    }
+
+    @Transactional
+    private void deleteChangePasswordRequest(String userEmail) {
+        changePasswordRepository.findByEmail(userEmail)
+                .ifPresent(cpr -> changePasswordRepository.deleteById(cpr.getId()));
     }
 
 }

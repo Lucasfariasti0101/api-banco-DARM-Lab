@@ -9,4 +9,6 @@ public interface UserChangePasswordRepository extends JpaRepository<UserChangePa
 
     Optional<UserChangePassword> findByCodeAndEmail(String code, String email);
 
+    Optional<UserChangePassword> findByEmail(String email);
+
 }

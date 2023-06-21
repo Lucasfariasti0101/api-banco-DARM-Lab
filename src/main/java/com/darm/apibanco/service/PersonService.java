@@ -11,8 +11,10 @@ import com.darm.apibanco.exception.ResourceNotFoundException;
 import com.darm.apibanco.model.Address;
 import com.darm.apibanco.model.Person;
 import com.darm.apibanco.model.User;
+import com.darm.apibanco.model.UserChangePassword;
 import com.darm.apibanco.repository.AddressRepository;
 import com.darm.apibanco.repository.PersonRepository;
+import com.darm.apibanco.repository.UserChangePasswordRepository;
 import com.darm.apibanco.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Pageable;
@@ -38,10 +40,12 @@ public class PersonService {
     private final UserRepository userRepository;
     
     private final ChangePasswordService changePasswordService;
+    private final UserChangePasswordRepository userChangePasswordRepository;
 
     public PersonService(PersonRepository personRepository,
                          PersonResponseMapper mapper,
-                         AddressRequestMapper addressMapper, AddressResponseMapper addressResponseMapper, AccountService accountService, AddressRepository addressRepository, UserRepository userRepository, ChangePasswordService changePasswordService) {
+                         AddressRequestMapper addressMapper, AddressResponseMapper addressResponseMapper, AccountService accountService, AddressRepository addressRepository, UserRepository userRepository, ChangePasswordService changePasswordService,
+                         UserChangePasswordRepository userChangePasswordRepository) {
         this.personRepository = personRepository;
         this.mapper = mapper;
         this.addressMapper = addressMapper;
@@ -50,6 +54,7 @@ public class PersonService {
         this.addressRepository = addressRepository;
         this.userRepository = userRepository;
         this.changePasswordService = changePasswordService;
+        this.userChangePasswordRepository = userChangePasswordRepository;
     }
 
     public PersonResponse findById(Long id) {
@@ -133,9 +138,8 @@ public class PersonService {
 
     public void forgotPassword(ForgotPasswordRequest request) {
 
-        Boolean requestCreated = userRepository.findByEmail(request.email())
-                .map(changePasswordService::createRequestToChangePassword)
-                .orElse(false);
+      userRepository.findByEmail(request.email())
+              .ifPresent(changePasswordService::createRequestToChangePassword);
 
     }
 
@@ -143,8 +147,17 @@ public class PersonService {
         return changePasswordService.validateCode(request);
     }
 
-    public void changePassword() {
+    public Boolean changePassword(ChangePasswordRequest request) {
+        User user = userRepository.findByEmail(request.email())
+                .orElseThrow(PersonNotFoundException::new);
 
+        Optional<UserChangePassword> userChangePassword = userChangePasswordRepository
+                .findByEmail(user.getEmail());
+
+        if (userChangePassword.isPresent()) {
+            return changePasswordService.changePassword(request, user) != null;
+        }
+        return false;
     }
 
     private Address getPersonAddress(Long addressId, Long personId) {
