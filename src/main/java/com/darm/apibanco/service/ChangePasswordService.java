@@ -70,7 +70,15 @@ public class ChangePasswordService {
         Optional<UserChangePassword> changePassword1 = changePasswordRepository
                 .findByCodeAndEmail(code, userEmail);
 
-        return changePassword1.isPresent() && validExpiration(changePassword1.get().getExpiration());
+        if (changePassword1.isEmpty()) {
+            return false;
+        }
+
+        if (!validExpiration(changePassword1.get().getExpiration())) {
+            this.deleteChangePasswordRequest(changePassword1.get().getEmail());
+            return false;
+        }
+        return true;
 
     }
 
