@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class ChangePasswordService {
@@ -41,7 +42,7 @@ public class ChangePasswordService {
 
         String code = generateCode();
         UserChangePassword userChangePassword = UserChangePassword.builder()
-                .code(encoder.encode(code))
+                .code(code)
                 .email(user.getEmail())
                 .expiration(LocalDateTime.now().plusMinutes(5))
                 .build();
@@ -66,17 +67,16 @@ public class ChangePasswordService {
 
     private Boolean changePasswordRequestIsValid(String code, String userEmail) {
 
-        String encodedCode = encoder.encode(code);
+        Optional<UserChangePassword> changePassword1 = changePasswordRepository
+                .findByCodeAndEmail(code, userEmail);
 
-        return changePasswordRepository.findByCodeAndEmail(encodedCode, userEmail)
-                .map(changePassword -> validExpiration(changePassword.getExpiration()))
-                .orElse(false);
+        return changePassword1.isPresent() && validExpiration(changePassword1.get().getExpiration());
 
     }
 
 
     private Boolean validExpiration(LocalDateTime expiration) {
-        return !LocalDateTime.now().isAfter(expiration);
+        return LocalDateTime.now().isBefore(expiration);
     }
 
     private EmailModel createEmailModel(UserChangePassword userChangePassword, String code) {
